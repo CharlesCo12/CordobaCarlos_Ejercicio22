@@ -17,6 +17,7 @@ X_test = scaler.transform(X_test)
 
 l=[]
 f1=[]
+f1_train=[]
 for i in range(20):
     mlp = sklearn.neural_network.MLPClassifier(activation='logistic', 
                                            hidden_layer_sizes=(i+1), 
@@ -24,6 +25,7 @@ for i in range(20):
     mlp.fit(X_train, Y_train)
     l.append(mlp.loss_)
     f1.append(sklearn.metrics.f1_score(Y_test, mlp.predict(X_test), average='macro'))
+    f1_train.append(sklearn.metrics.f1_score(Y_train, mlp.predict(X_train), average='macro'))
 
 x=np.arange(1,21)
 plt.figure(figsize=(12,8))
@@ -35,7 +37,10 @@ plt.xlabel('Número de Neuronas')
 plt.ylabel('Loss')
 plt.subplot(122)
 plt.scatter(x[6],f1[6],color='red',s=40)
-plt.plot(x,f1)
+plt.scatter(x[6],f1_train[6],color='red',s=40)
+plt.plot(x,f1,label='Test')
+plt.plot(x,f1_train,label='Train')
+plt.legend(loc=0.0)
 plt.xlabel('Número de Neuronas')
 plt.ylabel('F1 score')
 plt.grid()
@@ -54,6 +59,6 @@ for i in range(7):
                    vmin=-scale, vmax=scale)
     l1_plot.set_xticks(())
     l1_plot.set_yticks(())
-    l1_plot.set_xlabel('Neurona ' + str(i+1))
+    l1_plot.set_title('Neurona ' + str(i+1))
 plt.savefig('neuronas.png')
 plt.close()
